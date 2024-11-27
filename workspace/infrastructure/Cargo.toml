@@ -1,0 +1,22 @@
+[package]
+name = "infrastructure"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+domain = { path = "../domain" }
+sea-orm = { version = "^1.1.1", features = [ "sqlx-postgres", "runtime-async-std-native-tls", "macros" ] }
+futures = "0.3"
+sea-orm-migration = "^1.1.1"
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["json"] }
+async-trait = "0.1"
+serde = { version = "1.0", features=["derive"] }
+serde_json = { version = "1.0"}
+tokio = { version = "1", features = ["full"] }
+anyhow = "1.0"
+
+
+[lib]
+name = "infrastructure"
+path = "src/lib.rs"

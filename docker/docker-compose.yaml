@@ -1,0 +1,41 @@
+services:
+
+  postgres:
+    image: postgres:17-alpine
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: rust-sample-db
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready", "-d", "enterpriseiahub-db"]
+      interval: 5s
+      timeout: 60s
+      retries: 5
+      start_period: 5s  
+    ports:
+      - 5432:5432
+      
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: user@localhost.com
+      PGADMIN_DEFAULT_PASSWORD: password
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+      PGADMIN_CONFIG_MASTER_PASSWORD_REQUIRED: 'False'
+    entrypoint: >
+      /bin/sh -c "
+      chmod 600 /var/lib/pgadmin/pgpass;
+      chown pgadmin:pgadmin /var/lib/pgadmin/pgpass;
+      /entrypoint.sh
+      "
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+    ports:
+      - 8081:80
+    volumes:
+       - ./data/pgadmin/servers.json:/pgadmin4/servers.json
+       - ./data/pgadmin/pgpass:/var/lib/pgadmin/pgpass

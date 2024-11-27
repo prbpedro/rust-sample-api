@@ -1,0 +1,22 @@
+meta {
+  name: Create
+  type: http
+  seq: 4
+}
+
+post {
+  url: http://localhost:3000/api/v1/stub-entity
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "name": "name",
+    "auto_ref": 333333,
+    "value": {
+      "id": 1,
+      "name": "name"
+    }
+  }
+}

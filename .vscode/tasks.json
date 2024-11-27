@@ -1,0 +1,50 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Cargo: build (debug)",
+            "command": "cargo build",
+            "type": "shell",
+            "group": "build",
+            "options": {
+                "cwd": "${workspaceFolder}/workspace"
+            }
+        },
+        {
+            "label": "Cargo: build (release)",
+            "command": "cargo build --release",
+            "type": "shell",
+            "group": "build",
+            "options": {
+                "cwd": "${workspaceFolder}/workspace"
+            }
+        },
+        {
+            "label": "Cargo: test",
+            "command": "cargo test",
+            "type": "shell",
+            "group": "build",
+            "options": {
+                "cwd": "${workspaceFolder}/workspace"
+            }
+        },
+        {
+            "label": "Cargo: check",
+            "command": "cargo check",
+            "type": "shell",
+            "group": "build",
+            "options": {
+                "cwd": "${workspaceFolder}/workspace"
+            }
+        },
+        {
+            "label": "Cargo: run",
+            "command": "cargo run",
+            "type": "shell",
+            "group": "build",
+            "options": {
+                "cwd": "${workspaceFolder}/workspace"
+            }
+        }
+    ]
+}

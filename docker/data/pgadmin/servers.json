@@ -1,0 +1,14 @@
+{
+    "Servers": {
+        "1": {
+            "Name": "Localhost",
+            "Group": "Servers",
+            "Host": "postgres",
+            "Port": 5432,
+            "MaintenanceDB": "rust-sample-db",
+            "Username": "postgres",
+            "PassFile": "/var/lib/pgadmin/pgpass",
+            "SSLMode": "prefer"
+        }
+    }
+}

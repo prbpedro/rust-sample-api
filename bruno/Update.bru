@@ -1,0 +1,26 @@
+meta {
+  name: Update
+  type: http
+  seq: 5
+}
+
+put {
+  url: http://localhost:3000/api/v1/stub-entity/:id
+  body: json
+  auth: none
+}
+
+params:path {
+  id: 2
+}
+
+body:json {
+  {
+    "auto_ref": 333333,
+    "name": "updated",
+    "value": {
+      "id": 666,
+      "name": "updated"
+    }
+  }
+}

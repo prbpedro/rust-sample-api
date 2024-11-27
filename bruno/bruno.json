@@ -1,0 +1,9 @@
+{
+  "version": "1",
+  "name": "rust-stub-api",
+  "type": "collection",
+  "ignore": [
+    "node_modules",
+    ".git"
+  ]
+}
