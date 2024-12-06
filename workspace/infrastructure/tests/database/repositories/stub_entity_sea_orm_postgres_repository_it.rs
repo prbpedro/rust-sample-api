@@ -1,3 +1,4 @@
+use std::env;
 use std::sync::Arc;
 
 use domain::entities::stub_domain_entity::{KeyValue, StubEntity};
@@ -7,12 +8,16 @@ use infrastructure::database::repositories::stub_entity_sea_orm_postgres_reposit
 use tokio;
 
 async fn setup_db() -> Arc<DatabaseConnection<sea_orm::DatabaseConnection>> {
+    env::set_var(
+        "DATABASE_CONNECTION_STRING",
+        "postgres://postgres:password@localhost:5432/rust-sample-db",
+    );
 
     let db_connection = DatabaseConnection::new().await.unwrap();
 
     infrastructure::database::migrations::migrator::Migrator::run_migrations(&db_connection.conn)
-    .await
-    .unwrap();
+        .await
+        .unwrap();
 
     db_connection
 }

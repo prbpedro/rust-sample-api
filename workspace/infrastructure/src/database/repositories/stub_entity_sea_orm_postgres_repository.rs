@@ -37,6 +37,7 @@ impl StubEntityRepositoryPort for StubEntitySeaOrmPostgresRepository {
             Err(err) => bail!(err),
         }
     }
+    
     async fn get(&self, id: i32) -> Result<Option<StubEntity>> {
         let entity = Entity::find_by_id(id).one(&self.db.conn).await;
 

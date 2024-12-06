@@ -13,4 +13,7 @@ pub mod database {
     pub mod entities {
         pub mod stub_database_entity;
     }   
+
+    mod postgres_database_configuration;
+
 }
