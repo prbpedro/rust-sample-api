@@ -145,6 +145,7 @@ dependencies = [
  "once_cell",
  "opentelemetry",
  "opentelemetry-otlp",
+ "opentelemetry-semantic-conventions",
  "opentelemetry_sdk",
  "sea-orm",
  "serde",
@@ -1619,12 +1620,16 @@ dependencies = [
  "async-trait",
  "domain",
  "futures",
+ "opentelemetry",
+ "opentelemetry-otlp",
+ "opentelemetry_sdk",
  "sea-orm",
  "sea-orm-migration",
  "serde",
  "serde_json",
  "tokio",
  "tracing",
+ "tracing-opentelemetry",
  "tracing-subscriber",
 ]
 
@@ -2051,6 +2056,12 @@ dependencies = [
  "prost",
  "tonic",
 ]
+
+[[package]]
+name = "opentelemetry-semantic-conventions"
+version = "0.27.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "bc1b6902ff63b32ef6c489e8048c5e253e2e4a803ea3ea7e783914536eb15c52"
 
 [[package]]
 name = "opentelemetry_sdk"

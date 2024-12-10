@@ -30,3 +30,4 @@ opentelemetry = {version="*"}
 tracing-opentelemetry = "0.28"
 opentelemetry_sdk = { version = "*", features = ["async-std", "rt-tokio"] }
 opentelemetry-otlp = { version = "*", features = ["grpc-tonic"] }
+opentelemetry-semantic-conventions = "*"

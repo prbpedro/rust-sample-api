@@ -7,13 +7,16 @@ use axum::{
     Json,
 };
 use axum_extra::extract::WithRejection;
+use infrastructure::log_with_span;
 use serde_json::{json, Value};
-use tracing::info;
 use validator::Validate;
 
 use crate::{configuration::app_state::AppState, errors::app_errors::AppError};
 
 use super::dtos::stub_entity_dtos::{StubEntityAddDto, StubEntityUpdateDto};
+
+use tracing::info;
+
 
 #[axum::debug_handler]
 #[tracing::instrument(skip(state, request),fields(http.uri = %request.uri(), http.method = %request.method(), http.status_code, trace_id, span_id))]
@@ -28,10 +31,10 @@ pub async fn list_stub_entity_handler(
     let json_value = serde_json::to_value(stub_entities)?;
 
     let body: Json<Value> = Json(json_value);
-    info!("get_stub_entity_handler executed");
 
-    let current = tracing::Span::current();
-    current.record("http.status_code", StatusCode::OK.as_str());
+    log_with_span!(Level::INFO, "get_stub_entity_handler executed");
+
+    tracing::Span::current().record("http.status_code", StatusCode::OK.as_str());
     
     Ok((StatusCode::OK, body))
 }

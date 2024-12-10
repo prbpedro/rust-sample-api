@@ -17,3 +17,7 @@ pub mod database {
     mod postgres_database_configuration;
 
 }
+
+pub mod logging {
+    pub mod logging_util;
+}
