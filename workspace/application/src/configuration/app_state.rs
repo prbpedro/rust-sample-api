@@ -8,7 +8,6 @@ use crate::{
     use_cases::stub_entity_use_case::StubEntityUseCase,
 };
 
-
 pub struct AppState {
     pub database_connection: Arc<DatabaseConnection<sea_orm::DatabaseConnection>>,
     pub stub_entity_use_case: Arc<StubEntityUseCase>,

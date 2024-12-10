@@ -9,6 +9,7 @@ use crate::{
     use_cases::stub_entity_use_case::StubEntityUseCase,
 };
 
+#[derive(Debug)]
 pub struct StubEntityUpdateService {
     stub_entity_use_case: Arc<StubEntityUseCase>,
     database_connection: Arc<DatabaseConnection<sea_orm::DatabaseConnection>>,

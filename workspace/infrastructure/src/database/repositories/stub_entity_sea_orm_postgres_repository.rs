@@ -5,14 +5,15 @@ use anyhow::{bail, Result};
 use async_trait::async_trait;
 use domain::{
     entities::stub_domain_entity::StubEntity,
-    ports::repositories::{stub_entity_repository_port::StubEntityRepositoryPort, transaction_port::TransactionPort},
+    ports::repositories::{
+        stub_entity_repository_port::StubEntityRepositoryPort, transaction_port::TransactionPort,
+    },
 };
 use sea_orm::{ActiveModelTrait, DatabaseTransaction, EntityTrait};
 
 use super::database_data::{DatabaseConnection, Transaction};
 
-
-
+#[derive(Debug)]
 pub struct StubEntitySeaOrmPostgresRepository {
     db: Arc<DatabaseConnection<sea_orm::DatabaseConnection>>,
 }
@@ -25,8 +26,6 @@ impl StubEntitySeaOrmPostgresRepository {
 
 #[async_trait]
 impl StubEntityRepositoryPort for StubEntitySeaOrmPostgresRepository {
-    
-
     async fn add(&self, entity: &StubEntity) -> Result<StubEntity> {
         let active_model: ActiveModel = ActiveModel::from_domain(entity, false);
 
@@ -37,7 +36,7 @@ impl StubEntityRepositoryPort for StubEntitySeaOrmPostgresRepository {
             Err(err) => bail!(err),
         }
     }
-    
+
     async fn get(&self, id: i32) -> Result<Option<StubEntity>> {
         let entity = Entity::find_by_id(id).one(&self.db.conn).await;
 
@@ -91,6 +90,7 @@ impl StubEntityRepositoryPort for StubEntitySeaOrmPostgresRepository {
         }
     }
 
+    #[tracing::instrument(err)]
     async fn get_all(&self) -> Result<Vec<StubEntity>> {
         let entities = Entity::find().all(&self.db.conn).await;
         match entities {
@@ -99,5 +99,3 @@ impl StubEntityRepositoryPort for StubEntitySeaOrmPostgresRepository {
         }
     }
 }
-
-

@@ -1,3 +1,5 @@
+use core::fmt;
+
 use axum::extract::rejection::JsonRejection;
 use axum::http::StatusCode;
 use axum::response::{IntoResponse, Response};
@@ -15,6 +17,12 @@ pub enum AppError {
     UnprocessableEntity(String),
 }
 
+impl fmt::Display for AppError {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "AppError: {:?}", self)
+    }
+}
+
 impl IntoResponse for AppError {
     fn into_response(self) -> Response {
         match self {
@@ -23,6 +31,9 @@ impl IntoResponse for AppError {
                     backtrace = e.get_truncated_backtrace(),
                     "An error occurred: {}", e.cause
                 );
+
+                tracing::Span::current()
+                    .record("status_code", StatusCode::INTERNAL_SERVER_ERROR.as_u16());
 
                 build_error_response(
                     String::from("Unexpected error"),

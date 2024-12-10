@@ -26,6 +26,10 @@ pub mod services {
     pub mod stub_entity_update_service;
 }
 
+pub mod middleware {
+    pub mod tracing_middleware;
+}
+
 #[tokio::main]
 async fn main() {
     //TODO: Middleware for logging and error

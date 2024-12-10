@@ -1,3 +1,4 @@
+use core::fmt;
 use std::sync::Arc;
 
 use anyhow::Result;
@@ -42,5 +43,11 @@ impl StubEntityUseCase {
             Some(txn) => self.repository.get_within_transaction(id, txn).await,
             None => self.repository.get(id).await,
         }
+    }
+}
+
+impl fmt::Debug for StubEntityUseCase {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("StubEntityUseCase").finish()
     }
 }

@@ -1,0 +1,58 @@
+{
+    "timestamp": "2024-12-10T18:28:09.248712Z",
+    "level": "INFO",
+    "fields": {
+        "message": "get_stub_entity_handler executed"
+    },
+    "target": "application::handlers::stub_entity_handler",
+    "span": {
+        "http.method": "GET",
+        "http.uri": "/api/v1/stub-entity",
+        "name": "list_stub_entity_handler"
+    },
+    "spans": [
+        {
+            "correlation_id": "a3adbd69-bfd3-4f57-b5fc-846095c04082",
+            "method": "GET",
+            "path": "/api/v1/stub-entity",
+            "span_id": "8b2d61752bf803f2",
+            "trace_id": "82ec739a1d7580e38dabb49b85f9b953",
+            "name": "request"
+        },
+        {
+            "http.method": "GET",
+            "http.uri": "/api/v1/stub-entity",
+            "name": "list_stub_entity_handler"
+        }
+    ]
+}
+
+
+{
+    "timestamp": "2024-12-10T18:28:09.249065Z",
+    "level": "INFO",
+    "fields": {
+        "message": "request completed"
+    },
+    "target": "application::middleware::tracing_middleware",
+    "span": {
+        "correlation_id": "a3adbd69-bfd3-4f57-b5fc-846095c04082",
+        "method": "GET",
+        "path": "/api/v1/stub-entity",
+        "span_id": "8b2d61752bf803f2",
+        "status": 200,
+        "trace_id": "82ec739a1d7580e38dabb49b85f9b953",
+        "name": "request"
+    },
+    "spans": [
+        {
+            "correlation_id": "a3adbd69-bfd3-4f57-b5fc-846095c04082",
+            "method": "GET",
+            "path": "/api/v1/stub-entity",
+            "span_id": "8b2d61752bf803f2",
+            "status": 200,
+            "trace_id": "82ec739a1d7580e38dabb49b85f9b953",
+            "name": "request"
+        }
+    ]
+}
