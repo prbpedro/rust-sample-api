@@ -27,12 +27,11 @@ pub mod services {
 }
 
 pub mod middleware {
-    pub mod tracing_middleware;
+    pub mod request_middleware;
 }
 
 #[tokio::main]
 async fn main() {
-    //TODO: Middleware for logging and error
     //TODO: Endpoints to delete 
     //TODO: Circuit break + Retry in Database ops
     //TODO: Teste integrado de endpoint

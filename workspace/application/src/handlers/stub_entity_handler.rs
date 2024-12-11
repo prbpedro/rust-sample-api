@@ -9,20 +9,24 @@ use axum::{
 use axum_extra::extract::WithRejection;
 use infrastructure::log_with_span;
 use serde_json::{json, Value};
+use opentelemetry::trace::TraceContextExt;
+use tracing::Level;
+use tracing_opentelemetry::OpenTelemetrySpanExt;
 use validator::Validate;
+use infrastructure::logging::logging_util::REQUEST_DATA;
 
 use crate::{configuration::app_state::AppState, errors::app_errors::AppError};
 
 use super::dtos::stub_entity_dtos::{StubEntityAddDto, StubEntityUpdateDto};
 
-use tracing::info;
-
 
 #[axum::debug_handler]
-#[tracing::instrument(skip(state, request),fields(http.uri = %request.uri(), http.method = %request.method(), http.status_code, trace_id, span_id))]
+#[tracing::instrument(
+    skip(state),
+    // fields(http.uri = %request.uri(), http.method = %request.method(), http.status_code, trace_id, span_id)
+)]
 pub async fn list_stub_entity_handler(
-    State(state): State<Arc<AppState>>,
-    request: axum::http::Request<axum::body::Body>,
+    State(state): State<Arc<AppState>>
 ) -> Result<(StatusCode, Json<Value>), AppError> {
     let use_case = &*state.stub_entity_use_case;
 
@@ -34,12 +38,15 @@ pub async fn list_stub_entity_handler(
 
     log_with_span!(Level::INFO, "get_stub_entity_handler executed");
 
-    tracing::Span::current().record("http.status_code", StatusCode::OK.as_str());
+    // tracing::Span::current().record("http.status_code", StatusCode::OK.as_str());
     
     Ok((StatusCode::OK, body))
 }
 
 #[axum::debug_handler]
+#[tracing::instrument(
+    skip(state, payload),
+)]
 pub async fn add_stub_entity_handler(
     State(state): State<Arc<AppState>>,
     WithRejection(Json(payload), _): WithRejection<Json<StubEntityAddDto>, AppError>,
@@ -54,11 +61,14 @@ pub async fn add_stub_entity_handler(
     let json_value = serde_json::to_value(inserted_entity)?;
 
     let body: Json<Value> = Json(json_value);
-    info!("add_stub_entity_handler executed");
+    log_with_span!(Level::INFO, "add_stub_entity_handler executed");
     Ok((StatusCode::OK, body))
 }
 
 #[axum::debug_handler]
+#[tracing::instrument(
+    skip(state, payload, id),
+)]
 pub async fn update_stub_entity_handler(
     State(state): State<Arc<AppState>>,
     Path(id): Path<i32>,
@@ -73,11 +83,14 @@ pub async fn update_stub_entity_handler(
     let json_value = serde_json::to_value(inserted_entity)?;
 
     let body: Json<Value> = Json(json_value);
-    info!("update_stub_entity_handler executed");
+    log_with_span!(Level::INFO, "update_stub_entity_handler executed");
     Ok((StatusCode::OK, body))
 }
 
 #[axum::debug_handler]
+#[tracing::instrument(
+    skip(state, id),
+)]
 pub async fn get_stub_entity_handler(
     State(state): State<Arc<AppState>>,
     Path(id): Path<i32>,
@@ -95,6 +108,6 @@ pub async fn get_stub_entity_handler(
     let json_value = serde_json::to_value(retrieved_entity)?;
     let body: Json<Value> = Json(json_value);
 
-    info!("get_stub_entity_handler executed");
+    log_with_span!(Level::INFO, "get_stub_entity_handler executed");
     Ok((StatusCode::OK, body))
 }

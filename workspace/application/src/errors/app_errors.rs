@@ -4,9 +4,13 @@ use axum::extract::rejection::JsonRejection;
 use axum::http::StatusCode;
 use axum::response::{IntoResponse, Response};
 use axum::Json;
+use infrastructure::log_with_span;
+use infrastructure::logging::logging_util::REQUEST_DATA;
+use opentelemetry::trace::TraceContextExt;
 use sea_orm::DbErr;
 use serde_json::{json, Value};
-use tracing::{error, info};
+use tracing::Level;
+use tracing_opentelemetry::OpenTelemetrySpanExt;
 use validator::ValidationErrors;
 
 #[derive(Debug)]
@@ -27,8 +31,9 @@ impl IntoResponse for AppError {
     fn into_response(self) -> Response {
         match self {
             AppError::UnexpectedError(e) => {
-                error!(
-                    backtrace = e.get_truncated_backtrace(),
+                log_with_span!(
+                    Level::ERROR,
+                    backtrace = %e.get_truncated_backtrace(),
                     "An error occurred: {}", e.cause
                 );
 
@@ -142,7 +147,6 @@ impl From<anyhow::Error> for AppError {
             }
         }
 
-        info!("An error occurred: {}", err);
         AppError::UnexpectedError(UnexpectedError { cause: err })
     }
 }

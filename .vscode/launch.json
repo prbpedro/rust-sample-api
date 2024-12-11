@@ -13,7 +13,7 @@
             "cwd": "${workspaceFolder}",
             "preLaunchTask": "Cargo: build (debug)",
             "env": {
-                "RUST_LOG": "info,sqlx::postgres::notice=warn",
+                "RUST_LOG": "info,sqlx::postgres::notice=warn,sqlx_core=warn",
                 "RUST_BACKTRACE": "1",
                 "DATABASE_CONNECTION_STRING": "postgres://postgres:password@localhost:5432/rust-sample-db"
             },

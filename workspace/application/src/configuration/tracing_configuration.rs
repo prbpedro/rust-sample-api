@@ -33,6 +33,8 @@ pub fn configure_tracing() {
         .json()
         .with_current_span(false)
         .with_span_list(false)
+        .with_file(true)
+        .with_line_number(true)
         .with_filter(EnvFilter::from_default_env());
 
     let filter_layer = EnvFilter::try_from_default_env().unwrap();
