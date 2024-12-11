@@ -3,8 +3,8 @@ use axum::extract::MatchedPath;
 use axum::{extract::Request, response::Response};
 use futures_util::future::BoxFuture;
 use infrastructure::log_with_span;
-use infrastructure::logging::logging_util::RequestData;
-use infrastructure::logging::logging_util::REQUEST_DATA;
+use infrastructure::logging::logging_task_local::RequestData;
+use infrastructure::logging::logging_task_local::REQUEST_DATA;
 use opentelemetry::trace::TraceContextExt;
 use tracing::Level;
 use tracing_opentelemetry::OpenTelemetrySpanExt;
@@ -106,6 +106,8 @@ fn start_span(
     request_path: &String) -> Span {
     let span = info_span!(
             "ROOT_REQUEST", 
+            app.name = %env!("CARGO_PKG_NAME"),
+            app.version = %env!("CARGO_PKG_VERSION"),
             request.http_method = %request_http_method, 
             request.path_pattern = %request_path_pattern, 
             request.path = %request_path, 

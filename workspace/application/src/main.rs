@@ -5,6 +5,7 @@ pub mod configuration {
     pub mod routes;
     pub mod tracing_configuration;
     pub mod app_runner;
+    pub mod app_metrics_configuration;
 }
 
 pub mod handlers {
@@ -28,6 +29,7 @@ pub mod services {
 
 pub mod middleware {
     pub mod request_middleware;
+    pub mod request_metrics_middleware;
 }
 
 #[tokio::main]
@@ -36,5 +38,5 @@ async fn main() {
     //TODO: Circuit break + Retry in Database ops
     //TODO: Teste integrado de endpoint
     tracing_configuration::configure_tracing();
-    app_runner::run().await;
+    app_runner::run().await.unwrap();
 }

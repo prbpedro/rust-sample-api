@@ -13,9 +13,10 @@
             "cwd": "${workspaceFolder}",
             "preLaunchTask": "Cargo: build (debug)",
             "env": {
-                "RUST_LOG": "info,sqlx::postgres::notice=warn,sqlx_core=warn",
+                "RUST_LOG": "info,sqlx::postgres::notice=warn,sqlx_core=warn,sea_orm_migration::migrator=warn",
                 "RUST_BACKTRACE": "1",
-                "DATABASE_CONNECTION_STRING": "postgres://postgres:password@localhost:5432/rust-sample-db"
+                "DATABASE_CONNECTION_STRING": "postgres://postgres:password@localhost:5432/rust-sample-db",
+                "HTTP_REQUEST_METRICS_EXPONENTIAL_SECONDS": "0.5,0.8,1"
             },
             "console": "internalConsole"
         }

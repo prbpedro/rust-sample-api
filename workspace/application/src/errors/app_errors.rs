@@ -5,7 +5,7 @@ use axum::http::StatusCode;
 use axum::response::{IntoResponse, Response};
 use axum::Json;
 use infrastructure::log_with_span;
-use infrastructure::logging::logging_util::REQUEST_DATA;
+use infrastructure::logging::logging_task_local::REQUEST_DATA;
 use opentelemetry::trace::TraceContextExt;
 use sea_orm::DbErr;
 use serde_json::{json, Value};

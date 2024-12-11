@@ -13,7 +13,7 @@ use opentelemetry::trace::TraceContextExt;
 use tracing::Level;
 use tracing_opentelemetry::OpenTelemetrySpanExt;
 use validator::Validate;
-use infrastructure::logging::logging_util::REQUEST_DATA;
+use infrastructure::logging::logging_task_local::REQUEST_DATA;
 
 use crate::{configuration::app_state::AppState, errors::app_errors::AppError};
 

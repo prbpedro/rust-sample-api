@@ -15,9 +15,13 @@ pub mod database {
     }   
 
     mod postgres_database_configuration;
+}
 
+pub mod env_var {
+    pub mod env_var_util;
 }
 
 pub mod logging {
     pub mod logging_util;
+    pub mod logging_task_local;
 }

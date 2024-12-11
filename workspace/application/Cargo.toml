@@ -26,8 +26,12 @@ once_cell = "1.20"
 futures-util = "0.3"
 uuid = { version = "1.0", features = ["v4"] }
 
-opentelemetry = {version="*"}
+opentelemetry = {version="0.27"}
 tracing-opentelemetry = "0.28"
-opentelemetry_sdk = { version = "*", features = ["async-std", "rt-tokio"] }
-opentelemetry-otlp = { version = "*", features = ["grpc-tonic"] }
-opentelemetry-semantic-conventions = "*"
+opentelemetry_sdk = { version = "0.27", features = ["async-std", "rt-tokio"] }
+opentelemetry-otlp = { version = "0.27", features = ["grpc-tonic"] }
+opentelemetry-semantic-conventions = "0.27"
+
+
+metrics = { version = "0.24", default-features = false }
+metrics-exporter-prometheus = { version = "0.16", default-features = false }
