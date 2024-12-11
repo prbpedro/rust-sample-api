@@ -37,6 +37,7 @@ async fn main() {
     //TODO: Endpoints to delete 
     //TODO: Circuit break + Retry in Database ops
     //TODO: Teste integrado de endpoint
+    //TODO: reqwst http call
     tracing_configuration::configure_tracing();
     app_runner::run().await.unwrap();
 }

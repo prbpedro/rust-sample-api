@@ -8,25 +8,24 @@ use axum::{
 };
 use axum_extra::extract::WithRejection;
 use infrastructure::log_with_span;
-use serde_json::{json, Value};
+use infrastructure::logging::logging_task_local::REQUEST_DATA;
 use opentelemetry::trace::TraceContextExt;
+use serde_json::{json, Value};
 use tracing::Level;
 use tracing_opentelemetry::OpenTelemetrySpanExt;
 use validator::Validate;
-use infrastructure::logging::logging_task_local::REQUEST_DATA;
 
 use crate::{configuration::app_state::AppState, errors::app_errors::AppError};
 
 use super::dtos::stub_entity_dtos::{StubEntityAddDto, StubEntityUpdateDto};
 
-
 #[axum::debug_handler]
 #[tracing::instrument(
-    skip(state),
+    skip(state), err
     // fields(http.uri = %request.uri(), http.method = %request.method(), http.status_code, trace_id, span_id)
 )]
 pub async fn list_stub_entity_handler(
-    State(state): State<Arc<AppState>>
+    State(state): State<Arc<AppState>>,
 ) -> Result<(StatusCode, Json<Value>), AppError> {
     let use_case = &*state.stub_entity_use_case;
 
@@ -39,14 +38,12 @@ pub async fn list_stub_entity_handler(
     log_with_span!(Level::INFO, "get_stub_entity_handler executed");
 
     // tracing::Span::current().record("http.status_code", StatusCode::OK.as_str());
-    
+
     Ok((StatusCode::OK, body))
 }
 
 #[axum::debug_handler]
-#[tracing::instrument(
-    skip(state, payload),
-)]
+#[tracing::instrument(skip(state, payload), err)]
 pub async fn add_stub_entity_handler(
     State(state): State<Arc<AppState>>,
     WithRejection(Json(payload), _): WithRejection<Json<StubEntityAddDto>, AppError>,
@@ -66,9 +63,7 @@ pub async fn add_stub_entity_handler(
 }
 
 #[axum::debug_handler]
-#[tracing::instrument(
-    skip(state, payload, id),
-)]
+#[tracing::instrument(skip(state, payload, id), err)]
 pub async fn update_stub_entity_handler(
     State(state): State<Arc<AppState>>,
     Path(id): Path<i32>,
@@ -88,9 +83,7 @@ pub async fn update_stub_entity_handler(
 }
 
 #[axum::debug_handler]
-#[tracing::instrument(
-    skip(state, id),
-)]
+#[tracing::instrument(skip(state, id), err)]
 pub async fn get_stub_entity_handler(
     State(state): State<Arc<AppState>>,
     Path(id): Path<i32>,

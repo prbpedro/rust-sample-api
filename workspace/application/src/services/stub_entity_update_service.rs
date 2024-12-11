@@ -3,6 +3,7 @@ use std::sync::Arc;
 use anyhow::Result;
 use domain::entities::stub_domain_entity::StubEntity;
 use infrastructure::database::repositories::database_data::{DatabaseConnection, Transaction};
+use tracing::instrument;
 
 use crate::{
     handlers::dtos::stub_entity_dtos::StubEntityUpdateDto,
@@ -26,6 +27,7 @@ impl StubEntityUpdateService {
         }
     }
 
+    #[instrument(skip(self, id, dto), err)]
     pub async fn update(&self, id: i32, dto: StubEntityUpdateDto) -> Result<Option<StubEntity>> {
         let txn = Transaction::begin(&self.database_connection).await?;
 

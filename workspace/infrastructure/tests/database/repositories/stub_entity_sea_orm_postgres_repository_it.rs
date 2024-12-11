@@ -34,7 +34,7 @@ async fn test_add_and_get_stub_entity() {
             id: 1,
             name: "Test Value".to_string(),
         },
-        auto_ref: Some(1),
+        auto_ref: None,
     };
 
     // Test add

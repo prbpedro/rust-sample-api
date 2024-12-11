@@ -26,6 +26,7 @@ impl StubEntitySeaOrmPostgresRepository {
 
 #[async_trait]
 impl StubEntityRepositoryPort for StubEntitySeaOrmPostgresRepository {
+    #[tracing::instrument(skip(entity), err)]
     async fn add(&self, entity: &StubEntity) -> Result<StubEntity> {
         let active_model: ActiveModel = ActiveModel::from_domain(entity, false);
 
@@ -37,6 +38,7 @@ impl StubEntityRepositoryPort for StubEntitySeaOrmPostgresRepository {
         }
     }
 
+    #[tracing::instrument(err)]
     async fn get(&self, id: i32) -> Result<Option<StubEntity>> {
         let entity = Entity::find_by_id(id).one(&self.db.conn).await;
 
@@ -47,6 +49,7 @@ impl StubEntityRepositoryPort for StubEntitySeaOrmPostgresRepository {
         }
     }
 
+    #[tracing::instrument(skip(id, txn), err)]
     async fn get_within_transaction(
         &self,
         id: i32,
@@ -68,6 +71,7 @@ impl StubEntityRepositoryPort for StubEntitySeaOrmPostgresRepository {
         }
     }
 
+    #[tracing::instrument(skip(entity, txn), err)]
     async fn update_within_transaction(
         &self,
         entity: &StubEntity,
