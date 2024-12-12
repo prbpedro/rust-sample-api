@@ -26,7 +26,7 @@ impl StubEntitySeaOrmPostgresRepository {
 
 #[async_trait]
 impl StubEntityRepositoryPort for StubEntitySeaOrmPostgresRepository {
-    #[tracing::instrument(skip(entity), err)]
+    #[tracing::instrument(skip_all, err)]
     async fn add(&self, entity: &StubEntity) -> Result<StubEntity> {
         let active_model: ActiveModel = ActiveModel::from_domain(entity, false);
 
@@ -38,7 +38,7 @@ impl StubEntityRepositoryPort for StubEntitySeaOrmPostgresRepository {
         }
     }
 
-    #[tracing::instrument(err)]
+    #[tracing::instrument(skip_all, err)]
     async fn get(&self, id: i32) -> Result<Option<StubEntity>> {
         let entity = Entity::find_by_id(id).one(&self.db.conn).await;
 
@@ -49,7 +49,7 @@ impl StubEntityRepositoryPort for StubEntitySeaOrmPostgresRepository {
         }
     }
 
-    #[tracing::instrument(skip(id, txn), err)]
+    #[tracing::instrument(skip_all, err)]
     async fn get_within_transaction(
         &self,
         id: i32,
@@ -71,7 +71,7 @@ impl StubEntityRepositoryPort for StubEntitySeaOrmPostgresRepository {
         }
     }
 
-    #[tracing::instrument(skip(entity, txn), err)]
+    #[tracing::instrument(skip_all, err)]
     async fn update_within_transaction(
         &self,
         entity: &StubEntity,
@@ -94,7 +94,7 @@ impl StubEntityRepositoryPort for StubEntitySeaOrmPostgresRepository {
         }
     }
 
-    #[tracing::instrument(err)]
+    #[tracing::instrument(skip_all, err)]
     async fn get_all(&self) -> Result<Vec<StubEntity>> {
         let entities = Entity::find().all(&self.db.conn).await;
         match entities {

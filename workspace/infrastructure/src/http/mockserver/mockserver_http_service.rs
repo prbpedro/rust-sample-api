@@ -1,11 +1,12 @@
 use std::sync::Arc;
 
-use anyhow::{Ok, Result};
+use anyhow::{bail, Result};
 use async_trait::async_trait;
 use domain::{
     entities::stub_domain_entity::KeyValue,
     ports::repositories::mockserver_http_service_port::MockserverHttpServicePort,
 };
+use tracing::instrument;
 
 #[derive(Debug)]
 pub struct MockserverHttpService {
@@ -21,6 +22,8 @@ impl MockserverHttpService {
 
 #[async_trait]
 impl MockserverHttpServicePort for MockserverHttpService {
+
+    #[instrument(skip_all, err)]
     async fn execute_call(&self) -> Result<KeyValue> {
         let url = format!("{}/key-value", self.base_url);
 
@@ -31,11 +34,11 @@ impl MockserverHttpServicePort for MockserverHttpService {
             .await?;
 
         if !response.status().is_success() {
-            return Err(anyhow::anyhow!("Failed to execute call. Response={:?}", response));
+            bail!("Failed to execute call. Response={:?}", response);
         }
 
         let key_value: KeyValue = response.json::<KeyValue>().await?;
 
-        Ok(key_value)
+        anyhow::Ok(key_value)
     }
 }
