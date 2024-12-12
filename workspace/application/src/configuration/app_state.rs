@@ -1,6 +1,6 @@
 use anyhow::Result;
 use domain::ports::repositories::{mockserver_http_service_port::MockserverHttpServicePort, stub_entity_repository_port::StubEntityRepositoryPort};
-use infrastructure::{database::repositories::{database_data::DatabaseConnection, stub_entity_sea_orm_postgres_repository::StubEntitySeaOrmPostgresRepository}, http::mockserver::mockserver_http_service::MockserverHttpService};
+use infrastructure::{database::repositories::{database_data::DatabaseConnection, stub_entity_sea_orm_postgres_repository::StubEntitySeaOrmPostgresRepository}, http::mockserver::{mockserver_configuration::get_mockserver_base_url, mockserver_http_service::MockserverHttpService}};
 use std::sync::Arc;
 
 use crate::{
@@ -43,7 +43,8 @@ impl AppState {
 
 fn build_mock_server_http_service() -> Arc<dyn MockserverHttpServicePort> {
     let reqwest_client = Arc::new(reqwest::Client::new());
-    Arc::new(MockserverHttpService::new(reqwest_client))
+    let base_url = get_mockserver_base_url().unwrap();
+    Arc::new(MockserverHttpService::new(reqwest_client, base_url))
 }
 
 fn build_stub_entity_repository(

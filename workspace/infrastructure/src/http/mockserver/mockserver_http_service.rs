@@ -7,23 +7,22 @@ use domain::{
     ports::repositories::mockserver_http_service_port::MockserverHttpServicePort,
 };
 
-use super::mockserver_configuration::get_mockserver_base_url;
-
 #[derive(Debug)]
 pub struct MockserverHttpService {
     reqwest_client: Arc<reqwest::Client>,
+    base_url: String,
 }
 
 impl MockserverHttpService {
-    pub fn new(reqwest_client: Arc<reqwest::Client>) -> Self {
-        Self { reqwest_client }
+    pub fn new(reqwest_client: Arc<reqwest::Client>, base_url: String) -> Self {
+        Self { reqwest_client, base_url }
     }
 }
 
 #[async_trait]
 impl MockserverHttpServicePort for MockserverHttpService {
     async fn execute_call(&self) -> Result<KeyValue> {
-        let url = format!("{}/key-value", get_mockserver_base_url()?);
+        let url = format!("{}/key-value", self.base_url);
 
         let response = self.reqwest_client.post(url)
             .header("api-key", "key")
@@ -32,7 +31,7 @@ impl MockserverHttpServicePort for MockserverHttpService {
             .await?;
 
         if !response.status().is_success() {
-            return Err(anyhow::anyhow!("Failed to execute call"));
+            return Err(anyhow::anyhow!("Failed to execute call. Response={:?}", response));
         }
 
         let key_value: KeyValue = response.json::<KeyValue>().await?;
