@@ -29,3 +29,10 @@ pub mod logging {
 pub mod tracing {
     pub mod tracing_util;
 }
+
+pub mod http {
+    pub mod mockserver{
+        pub mod mockserver_configuration;
+        pub mod mockserver_http_service;
+    }
+}

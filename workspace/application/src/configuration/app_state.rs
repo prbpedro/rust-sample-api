@@ -1,6 +1,6 @@
 use anyhow::Result;
-use domain::ports::repositories::stub_entity_repository_port::StubEntityRepositoryPort;
-use infrastructure::database::repositories::{database_data::DatabaseConnection, stub_entity_sea_orm_postgres_repository::StubEntitySeaOrmPostgresRepository};
+use domain::ports::repositories::{mockserver_http_service_port::MockserverHttpServicePort, stub_entity_repository_port::StubEntityRepositoryPort};
+use infrastructure::{database::repositories::{database_data::DatabaseConnection, stub_entity_sea_orm_postgres_repository::StubEntitySeaOrmPostgresRepository}, http::mockserver::mockserver_http_service::MockserverHttpService};
 use std::sync::Arc;
 
 use crate::{
@@ -20,7 +20,11 @@ impl AppState {
 
         let stub_entity_repository = build_stub_entity_repository(&database_connection);
 
-        let stub_entity_use_case = build_stub_entity_use_case(&stub_entity_repository);
+        let mockserver_http_service = build_mock_server_http_service();
+
+        let stub_entity_use_case = build_stub_entity_use_case(
+            &stub_entity_repository,
+            &mockserver_http_service);
 
         let stub_entity_update_service = build_stub_entity_update_service(
             &stub_entity_use_case,
@@ -35,6 +39,11 @@ impl AppState {
 
         Ok(Arc::new(app_state))
     }
+}
+
+fn build_mock_server_http_service() -> Arc<dyn MockserverHttpServicePort> {
+    let reqwest_client = Arc::new(reqwest::Client::new());
+    Arc::new(MockserverHttpService::new(reqwest_client))
 }
 
 fn build_stub_entity_repository(
@@ -57,6 +66,7 @@ fn build_stub_entity_update_service(
 
 fn build_stub_entity_use_case(
     repository: &Arc<dyn StubEntityRepositoryPort>,
+    mockserver_http_service: &Arc<dyn MockserverHttpServicePort>,
 ) -> Arc<StubEntityUseCase> {
-    Arc::new(StubEntityUseCase::new(repository.clone()))
+    Arc::new(StubEntityUseCase::new(repository.clone(), mockserver_http_service.clone()))
 }

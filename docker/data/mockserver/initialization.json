@@ -1,0 +1,23 @@
+[
+    {
+        "httpRequest": {
+            "method": "POST",
+            "path": "/key-value",
+            "headers": {
+                "api-key": [
+                    "key"
+                ]
+            },
+            "body": {
+                "id": "id"
+            }
+        },
+        "httpResponse": {
+            "statusCode": 200,
+            "body": {
+                "id": 1,
+                "name": "FROM_MOCK_SERVER"
+            }
+        }
+    }
+]

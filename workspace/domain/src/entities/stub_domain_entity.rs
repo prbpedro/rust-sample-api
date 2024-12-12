@@ -1,4 +1,4 @@
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize)]
 pub struct StubEntity {
@@ -8,7 +8,7 @@ pub struct StubEntity {
     pub auto_ref: Option<i32>,
 }
 
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct KeyValue {
     pub id: i32,
     pub name: String,

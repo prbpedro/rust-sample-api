@@ -5,24 +5,34 @@ use anyhow::Result;
 use domain::{
     entities::stub_domain_entity::StubEntity,
     ports::repositories::{
+        mockserver_http_service_port::MockserverHttpServicePort,
         stub_entity_repository_port::StubEntityRepositoryPort, transaction_port::TransactionPort,
     },
 };
 
 pub struct StubEntityUseCase {
     repository: Arc<dyn StubEntityRepositoryPort>,
+    mockserver_http_service: Arc<dyn MockserverHttpServicePort>,
 }
 
 impl StubEntityUseCase {
-    pub fn new(repository: Arc<dyn StubEntityRepositoryPort>) -> Self {
-        Self { repository }
+    pub fn new(
+        repository: Arc<dyn StubEntityRepositoryPort>,
+        mockserver_http_service: Arc<dyn MockserverHttpServicePort>,
+    ) -> Self {
+        Self {
+            repository,
+            mockserver_http_service,
+        }
     }
 
     pub async fn list(&self) -> Result<Vec<StubEntity>> {
         self.repository.get_all().await
     }
 
-    pub async fn add(&self, entity: &StubEntity) -> Result<StubEntity> {
+    pub async fn add(&self, entity: &mut StubEntity) -> Result<StubEntity> {
+        let key_value = self.mockserver_http_service.execute_call().await?;
+        entity.value = key_value;
         self.repository.add(entity).await
     }
 

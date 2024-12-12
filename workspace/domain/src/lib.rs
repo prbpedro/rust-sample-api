@@ -7,5 +7,6 @@ pub mod ports {
         pub mod stub_entity_repository_port;
         pub mod transaction_port;
         pub mod database_connection_port;
+        pub mod mockserver_http_service_port;
     }
 }

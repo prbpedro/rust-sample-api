@@ -42,15 +42,15 @@ pub async fn list_stub_entity_handler(
 }
 
 #[axum::debug_handler]
-#[tracing::instrument(skip_all, err)]
+#[tracing::instrument(skip_all)]
 pub async fn add_stub_entity_handler(
     State(state): State<Arc<AppState>>,
     WithRejection(Json(payload), _): WithRejection<Json<StubEntityAddDto>, AppError>,
 ) -> Result<(StatusCode, Json<Value>), AppError> {
     payload.validate()?;
     let use_case = &*state.stub_entity_use_case;
-    let stub_entity = payload.to_domain();
-    let inserted_entity = use_case.add(&stub_entity).await?;
+    let mut stub_entity = payload.to_domain();
+    let inserted_entity = use_case.add(&mut stub_entity).await?;
     let json_value = serde_json::to_value(inserted_entity)?;
     let body: Json<Value> = Json(json_value);
     log_with_span!(Level::INFO, "add_stub_entity_handler executed");
@@ -58,7 +58,8 @@ pub async fn add_stub_entity_handler(
 }
 
 #[axum::debug_handler]
-#[tracing::instrument(skip_all, err)]
+#[tracing::instrument(skip_all)]
+// #[tracing::instrument(skip_all, err)] Gera log com erro mas muito grande
 pub async fn update_stub_entity_handler(
     State(state): State<Arc<AppState>>,
     Path(id): Path<i32>,
@@ -74,7 +75,7 @@ pub async fn update_stub_entity_handler(
 }
 
 #[axum::debug_handler]
-#[tracing::instrument(skip_all, err)]
+#[tracing::instrument(skip_all)]
 pub async fn get_stub_entity_handler(
     State(state): State<Arc<AppState>>,
     Path(id): Path<i32>,

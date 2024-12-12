@@ -21,6 +21,7 @@ tracing-opentelemetry = "0.28"
 opentelemetry_sdk = { version = "0.27", features = ["async-std", "rt-tokio"] }
 opentelemetry-otlp = { version = "0.27", features = ["grpc-tonic"] }
 
+reqwest = { version = "0.12", features = ["json"] }
 
 [lib]
 name = "infrastructure"

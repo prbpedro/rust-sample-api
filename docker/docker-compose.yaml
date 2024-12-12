@@ -1,5 +1,16 @@
 services:
 
+  mockServer:
+    image: mockserver/mockserver:5.15.0
+    ports:
+      - 1080:1080
+    environment:
+      MOCKSERVER_INITIALIZATION_JSON_PATH: /mockserver/initialization.json
+    volumes:
+      - type: bind
+        source: ./data/mockserver
+        target: /mockserver
+
   zipkin:
     image: openzipkin/zipkin:latest
     ports:
@@ -54,7 +65,6 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
-
     ports:
       - 8081:80
     volumes:
