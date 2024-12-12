@@ -10,10 +10,16 @@ use tracing_subscriber::{
 pub fn configure_tracing() {
     global::set_text_map_propagator(TraceContextPropagator::new());
 
-    let resource = Resource::new(vec![KeyValue::new(
-        opentelemetry_semantic_conventions::resource::SERVICE_NAME,
-        "stub-application",
-    )]);
+    let resource = Resource::new(vec![
+        KeyValue::new(
+            opentelemetry_semantic_conventions::resource::SERVICE_NAME,
+            env!("CARGO_PKG_NAME"),
+        ),
+        KeyValue::new(
+            opentelemetry_semantic_conventions::resource::SERVICE_VERSION,
+            env!("CARGO_PKG_VERSION"),
+        ),
+    ]);
 
     let tracer_provider = opentelemetry_sdk::trace::TracerProvider::builder()
         .with_resource(resource)

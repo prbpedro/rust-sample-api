@@ -4,19 +4,37 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
+        // {
+        //     "type": "lldb",
+        //     "request": "launch",
+        //     "name": "Debug",
+        //     "program": "${workspaceFolder}/workspace/target/debug/application",
+        //     "args": [],
+        //     "cwd": "${workspaceFolder}",
+        //     "preLaunchTask": "Cargo: build (debug)",
+        //     "env": {
+        //         "RUST_LOG": "info,sqlx::postgres::notice=warn,sqlx_core=warn,sea_orm_migration::migrator=warn",
+        //         "RUST_BACKTRACE": "1",
+        //         "DATABASE_CONNECTION_STRING": "postgres://postgres:password@localhost:5432/rust-sample-db",
+        //         "HTTP_REQUEST_METRICS_EXPONENTIAL_SECONDS": "0.5,0.8,1"
+        //     },
+        //     "console": "internalConsole"
+        // },
         {
             "type": "lldb",
             "request": "launch",
-            "name": "Debug",
-            "program": "${workspaceFolder}/workspace/target/debug/application",
-            "args": [],
-            "cwd": "${workspaceFolder}",
-            "preLaunchTask": "Cargo: build (debug)",
+            "name": "Launch Debug LLDB",
             "env": {
                 "RUST_LOG": "info,sqlx::postgres::notice=warn,sqlx_core=warn,sea_orm_migration::migrator=warn",
                 "RUST_BACKTRACE": "1",
                 "DATABASE_CONNECTION_STRING": "postgres://postgres:password@localhost:5432/rust-sample-db",
                 "HTTP_REQUEST_METRICS_EXPONENTIAL_SECONDS": "0.5,0.8,1"
+            },
+            "cargo": {
+                "cwd": "${workspaceFolder}/workspace",
+                "args": [
+                    "build"
+                ]
             },
             "console": "internalConsole"
         }
