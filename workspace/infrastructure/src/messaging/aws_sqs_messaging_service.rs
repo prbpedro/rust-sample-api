@@ -32,13 +32,13 @@ impl MessagingServicePort for AwsSqsMessagingService {
         deduplication_id: String,
         body: String) -> Result<()> {
         let response = &self.aws_client
-        .send_message()
-        .queue_url(&self.aws_sqs_queue_url)
-        .message_body(body)
-        .message_group_id(partition_id)
-        .message_deduplication_id(format!("CREATE#{}", deduplication_id))
-        .send()
-        .await;
+            .send_message()
+            .queue_url(&self.aws_sqs_queue_url)
+            .message_body(body)
+            .message_group_id(partition_id)
+            .message_deduplication_id(format!("CREATE#{}", deduplication_id))
+            .send()
+            .await;
 
         match response {
             Ok(_) => {

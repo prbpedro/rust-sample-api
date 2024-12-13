@@ -1,5 +1,5 @@
 use core::fmt;
-use std::{fmt::format, sync::Arc};
+use std::sync::Arc;
 
 use anyhow::Result;
 use domain::{

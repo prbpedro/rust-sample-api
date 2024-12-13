@@ -30,7 +30,8 @@ async fn main() -> Result<(), sqs::Error> {
                                 client.delete_message()
                                     .queue_url(queue_url)
                                     .receipt_handle(receipt_handle)
-                                    .send().await?;
+                                    .send()
+                                    .await?;
                             }
                         }
                     }

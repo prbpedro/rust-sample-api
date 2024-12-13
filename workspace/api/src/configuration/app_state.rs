@@ -1,4 +1,5 @@
 use anyhow::Result;
+use aws_config::{retry::RetryConfig, BehaviorVersion};
 use domain::ports::{
     messaging::messaging_service_port::MessagingServicePort,
     repositories::{
@@ -20,7 +21,7 @@ use infrastructure::{
         aws_sqs_messaging_service::AwsSqsMessagingService,
     },
 };
-use std::sync::Arc;
+use std::{sync::Arc, time::Duration};
 
 use crate::{
     services::stub_entity_update_service::StubEntityUpdateService,
@@ -31,6 +32,8 @@ pub struct AppState {
     pub database_connection: Arc<DatabaseConnection<sea_orm::DatabaseConnection>>,
     pub stub_entity_use_case: Arc<StubEntityUseCase>,
     pub stub_entity_update_service: Arc<StubEntityUpdateService>,
+    pub aws_client: Arc<aws_sdk_sqs::Client>,
+    pub messaging_service: Arc<dyn MessagingServicePort>,
 }
 
 impl AppState {
@@ -41,7 +44,20 @@ impl AppState {
 
         let mockserver_http_service = build_mock_server_http_service();
 
-        let messaging_service = build_messaging_service().await;
+        let retry_config = RetryConfig::standard()
+            .with_max_attempts(10)
+            .with_initial_backoff(Duration::from_millis(1))
+            .with_max_backoff(Duration::from_secs(20));
+        let retry_config = retry_config;
+
+        let config = aws_config::defaults(BehaviorVersion::latest())
+            .retry_config(retry_config)
+            .load()
+            .await;
+
+        let aws_client: Arc<aws_sdk_sqs::Client> = Arc::new(aws_sdk_sqs::Client::new(&config));
+
+        let messaging_service = build_messaging_service(&aws_client).await;
 
         let stub_entity_use_case = build_stub_entity_use_case(
             &stub_entity_repository,
@@ -56,6 +72,8 @@ impl AppState {
             database_connection,
             stub_entity_use_case,
             stub_entity_update_service,
+            aws_client,
+            messaging_service
         };
 
         Ok(Arc::new(app_state))
@@ -98,15 +116,12 @@ fn build_stub_entity_use_case(
     ))
 }
 
-async fn build_messaging_service() -> Arc<dyn MessagingServicePort> {
-    let config = aws_config::load_from_env().await;
-    let aws_client = Arc::new(aws_sdk_sqs::Client::new(&config));
+async fn build_messaging_service(
+    aws_client: &Arc<aws_sdk_sqs::Client>,
+) -> Arc<dyn MessagingServicePort> {
     let aws_sqs_queue_url = get_rust_test_aws_sqs_queue_url().unwrap();
     Arc::new(AwsSqsMessagingService::new(
         aws_client.clone(),
         aws_sqs_queue_url.clone(),
     ))
 }
-
-// let config = aws_config::load_from_env().await;
-// let client = aws_sdk_sqs::Client::new(&config);
