@@ -10,6 +10,22 @@ cargo build
 ## Running
 
 Running:
+
+```bash
+cd docker
+docker compose up -d;
+```
+
+```bash
+cd docker/data/aws-sqs
+chmod +x aws-init.sh;
+```
+
+```bash
+cd docker/data/aws-sqs
+./aws-init.sh;
+```
+
 ```bash
 cd docker/
 docker compose up -d
@@ -21,8 +37,3 @@ HTTP_REQUEST_METRICS_EXPONENTIAL_SECONDS=0.5,0.8,1 \
 MOCKSERVER_BASE_URL=http://localhost:1080 \
 cargo run
 ```
-## RabbitMQ
-
-aws sqs list-queues --profile localstack
-
-https://docs.aws.amazon.com/sdk-for-rust/latest/dg/rust_sqs_code_examples.html

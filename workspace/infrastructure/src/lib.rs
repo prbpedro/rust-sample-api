@@ -36,3 +36,8 @@ pub mod http {
         pub mod mockserver_http_service;
     }
 }
+
+pub mod messaging {
+    pub mod aws_sqs_messaging_service;
+    pub mod aws_sqs_messaging_configuration;
+}

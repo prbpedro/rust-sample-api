@@ -9,4 +9,8 @@ pub mod ports {
         pub mod database_connection_port;
         pub mod mockserver_http_service_port;
     }
+
+    pub mod messaging {
+        pub mod messaging_service_port;
+    }
 }

@@ -23,6 +23,9 @@ opentelemetry-otlp = { version = "0.27", features = ["grpc-tonic"] }
 
 reqwest = { version = "0.12", features = ["json"] }
 
+aws-config = { version = "1.1.7", features = ["behavior-version-latest"] }
+aws-sdk-sqs = "1.50.0"
+
 [lib]
 name = "infrastructure"
 path = "src/lib.rs"
